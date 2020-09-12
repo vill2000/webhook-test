@@ -1,0 +1,28 @@
+pipeline {
+	agent any
+	stages {
+		stage ("1. Install docker package") {
+			steps {
+				sh "yum install docker -y"
+			}
+		}
+		stage ("2. Start the docker service") {
+			steps {
+				sh "service docker start"
+			}
+		}
+
+		stage ("3. Build the docker image") {
+			steps {
+				sh "docker build -t $image /home/ec2-user/"
+			}
+		}
+		stage ("4. Run the container.") {
+			steps {
+				sh "docker run -dit -p 8181:80 --name $container $image"
+			}
+		}
+	}
+}
+
+
